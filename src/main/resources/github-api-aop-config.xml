@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+
+  <aop:config>
+    <aop:pointcut id="github-api-calls"
+      expression="execution(* com.findinpath.github.api.GithubApi.*(..))  "/>
+
+    <!--
+    the githubApiRetriesIncludedTimedAdvice advice wraps
+    the githubApiRetryAdvice advice and this it can provide
+    timing information for the duration of the API call
+    including retries
+     -->
+    <aop:advisor pointcut-ref="github-api-calls"
+      advice-ref="githubApiRetriesIncludedTimedAdvice" order="1"/>
+    <aop:advisor pointcut-ref="github-api-calls"
+      advice-ref="githubApiRetryAdvice" order="2"/>
+    <!--
+    timing advice for each (retries are not taken into account)
+    of the Github API calls.
+    -->
+    <aop:advisor pointcut-ref="github-api-calls"
+      advice-ref="githubApiTimedAdvice" order="3"/>
+
+  </aop:config>
+
+</beans>
