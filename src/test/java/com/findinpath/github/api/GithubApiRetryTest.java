@@ -89,32 +89,32 @@ public class GithubApiRetryTest {
 
     var meters = meterRegistry.getMeters();
 
-    var bdsApiTimer = getExactlyOneMeter(meters, API_METRIC_NAME,
+    var githubApiTimer = getExactlyOneMeter(meters, API_METRIC_NAME,
         Timer.class,
         Tag.of("exception", "none"),
         Tag.of("class", "GithubApi"),
         Tag.of("method", "listOrganisationRepositories"));
 
-    var bdsApiRetryTimer = getExactlyOneMeter(meters, API_RETRY_METRIC_NAME,
+    var githubApiRetryTimer = getExactlyOneMeter(meters, API_RETRY_METRIC_NAME,
         Timer.class,
         Tag.of("exception", "none"),
         Tag.of("class", "GithubApi"),
         Tag.of("method", "listOrganisationRepositories"));
 
-    assertThat(bdsApiTimer.count(), equalTo(1L));
-    assertThat(bdsApiRetryTimer.count(), equalTo(1L));
-    assertThat(bdsApiRetryTimer.max(TimeUnit.MILLISECONDS),
-        greaterThanOrEqualTo(bdsApiTimer.max(TimeUnit.MILLISECONDS)));
-    assertThat(bdsApiTimer.max(TimeUnit.MILLISECONDS),
+    assertThat(githubApiTimer.count(), equalTo(1L));
+    assertThat(githubApiRetryTimer.count(), equalTo(1L));
+    assertThat(githubApiRetryTimer.max(TimeUnit.MILLISECONDS),
+        greaterThanOrEqualTo(githubApiTimer.max(TimeUnit.MILLISECONDS)));
+    assertThat(githubApiTimer.max(TimeUnit.MILLISECONDS),
         greaterThanOrEqualTo((double) delay));
 
-    var bdsApiRetriesCounter = getExactlyOneMeter(meters, API_METRIC_NAME + "_retries",
+    var githubApiRetriesCounter = getExactlyOneMeter(meters, API_METRIC_NAME + "_retries",
         Counter.class,
         Tag.of(MicrometerRetryListenerSupport.CLASS_TAG_NAME, "GithubApi"),
         Tag.of(MicrometerRetryListenerSupport.METHOD_TAG_NAME, "listOrganisationRepositories"),
         Tag.of(MicrometerRetryListenerSupport.RETRY_TAG_NAME, "0"),
         Tag.of(MicrometerRetryListenerSupport.EXCEPTION_TAG_NAME, "none"));
-    assertThat(bdsApiRetriesCounter.count(), equalTo((double) 1));
+    assertThat(githubApiRetriesCounter.count(), equalTo((double) 1));
   }
 
 
@@ -158,13 +158,13 @@ public class GithubApiRetryTest {
     assertThat(githubApiRetryTimer.max(TimeUnit.MILLISECONDS),
         greaterThan((double) GithubApiRetryTest.TestConfiguration.INITIAL_BACKOFF_TIME));
 
-    var bdsApiRetriesCounter = getExactlyOneMeter(meters, API_METRIC_NAME + "_retries",
+    var githubApiRetriesCounter = getExactlyOneMeter(meters, API_METRIC_NAME + "_retries",
         Counter.class,
         Tag.of(MicrometerRetryListenerSupport.CLASS_TAG_NAME, "GithubApi"),
         Tag.of(MicrometerRetryListenerSupport.METHOD_TAG_NAME, "getOrganisationRepository"),
         Tag.of(MicrometerRetryListenerSupport.RETRY_TAG_NAME, "1"),
         Tag.of(MicrometerRetryListenerSupport.EXCEPTION_TAG_NAME, "IllegalStateException"));
-    assertThat(bdsApiRetriesCounter.count(), equalTo((double) 1));
+    assertThat(githubApiRetriesCounter.count(), equalTo((double) 1));
 
   }
 
@@ -210,12 +210,12 @@ public class GithubApiRetryTest {
     assertThat(githubApiRetryTimer.max(TimeUnit.MILLISECONDS),
         greaterThan((double) GithubApiRetryTest.TestConfiguration.INITIAL_BACKOFF_TIME * 2));
 
-    var bdsApiRetriesCounter = getExactlyOneMeter(meters, API_METRIC_NAME + "_failures",
+    var githubApiRetriesCounter = getExactlyOneMeter(meters, API_METRIC_NAME + "_failures",
         Counter.class,
         Tag.of(MicrometerRetryListenerSupport.CLASS_TAG_NAME, "GithubApi"),
         Tag.of(MicrometerRetryListenerSupport.METHOD_TAG_NAME, "getOrganisationRepository"),
         Tag.of(MicrometerRetryListenerSupport.EXCEPTION_TAG_NAME, "IllegalStateException"));
-    assertThat(bdsApiRetriesCounter.count(), equalTo((double) 1));
+    assertThat(githubApiRetriesCounter.count(), equalTo((double) 1));
 
   }
 

@@ -94,13 +94,13 @@ via spring AOP for the class `com.findinpath.github.api.GithubApi`
     assertThat(githubApiRetryTimer.max(TimeUnit.MILLISECONDS),
         greaterThan((double) GithubApiRetryTest.TestConfiguration.INITIAL_BACKOFF_TIME));
 
-    var bdsApiRetriesCounter = getExactlyOneMeter(meters, API_METRIC_NAME + "_retries",
+    var githubApiRetriesCounter = getExactlyOneMeter(meters, API_METRIC_NAME + "_retries",
         Counter.class,
         Tag.of(MicrometerRetryListenerSupport.CLASS_TAG_NAME, "GithubApi"),
         Tag.of(MicrometerRetryListenerSupport.METHOD_TAG_NAME, "getOrganisationRepository"),
         Tag.of(MicrometerRetryListenerSupport.RETRY_TAG_NAME, "1"),
         Tag.of(MicrometerRetryListenerSupport.EXCEPTION_TAG_NAME, "IllegalStateException"));
-    assertThat(bdsApiRetriesCounter.count(), equalTo((double) 1));
+    assertThat(githubApiRetriesCounter.count(), equalTo((double) 1));
 
   }
 ```
