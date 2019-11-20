@@ -8,8 +8,6 @@ import java.util.List;
  * Slimmed version of the Github API used only for test purposes for simulating the interaction with
  * an external API.
  * <p>
- * Due to the fact that this API is mocked in the tests, no concrete implementation will be provided
- * in the source code of the project.
  */
 public class GithubApi {
 

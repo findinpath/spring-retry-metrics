@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 /**
  * Utility class used for filtering {@link Timer} meters based on the specified criteria.
  */
-final class MeterUtils {
+public final class MeterUtils {
 
   private MeterUtils() {
   }
 
-  public static <T extends Meter> T getExactlyOneTimer(
+  public static <T extends Meter> T getExactlyOneMeter(
       List<Meter> meters, String metricId,
       Class<T> clazz, Tag... tags) {
     var result = getMeters(meters, metricId, clazz, tags);
@@ -37,7 +37,7 @@ final class MeterUtils {
     return meters
         .stream()
         .filter(meter -> matches(meter, metricId, tags))
-        .filter(meter -> meter instanceof Timer)
+        .filter(clazz::isInstance)
         .map(meter -> convertInstanceOfObject(meter, clazz))
         .collect(Collectors.toList());
   }

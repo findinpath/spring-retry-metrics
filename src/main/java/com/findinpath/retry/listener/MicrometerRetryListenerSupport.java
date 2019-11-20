@@ -27,12 +27,12 @@ import org.springframework.retry.listener.RetryListenerSupport;
 public class MicrometerRetryListenerSupport extends RetryListenerSupport {
 
   private static final String NAME_TAG_NAME = "name";
-  private static final String CLASS_TAG_NAME = "class";
-  private static final String METHOD_TAG_NAME = "method";
   private static final String UNKNOWN_NAME = "unknown";
-  private static final String RETRY_TAG_NAME = "retry";
-  private static final String EXCEPTION_TAG_NAME = "exception";
   private static final String NONE = "none";
+  public static final String CLASS_TAG_NAME = "class";
+  public static final String METHOD_TAG_NAME = "method";
+  public static final String RETRY_TAG_NAME = "retry";
+  public static final String EXCEPTION_TAG_NAME = "exception";
 
 
   private final MeterRegistry meterRegistry;

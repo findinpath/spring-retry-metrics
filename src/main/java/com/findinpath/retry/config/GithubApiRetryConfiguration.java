@@ -41,7 +41,7 @@ public class GithubApiRetryConfiguration {
   private static RetryTemplate createRetryTemplateForRestTemplates(MeterRegistry meterRegistry,
       int maxAttempts,
       int initialBackoffTime,
-      String retryMetricName) {
+      String metricName) {
 
     RetryTemplate retryTemplate = new RetryTemplate();
 
@@ -51,7 +51,7 @@ public class GithubApiRetryConfiguration {
     retryTemplate.setBackOffPolicy(backOffPolicy);
     retryTemplate.setRetryPolicy(createSimpleRetryPolicy(maxAttempts));
     retryTemplate.setListeners(new RetryListener[]{
-        new MicrometerRetryListenerSupport(meterRegistry, retryMetricName)
+        new MicrometerRetryListenerSupport(meterRegistry, metricName)
     });
     return retryTemplate;
   }
@@ -68,7 +68,7 @@ public class GithubApiRetryConfiguration {
       @Value("${github.api.retry.initialBackoffTime}") int initialBackoffTime) {
 
     return createRetryTemplateForRestTemplates(meterRegistry, maxAttempts, initialBackoffTime,
-        API_RETRY_METRIC_NAME);
+        API_METRIC_NAME);
   }
 
   @Bean(name = "githubApiRetryAdvice")
