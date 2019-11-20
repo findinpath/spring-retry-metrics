@@ -39,7 +39,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 public class GithubApiRetryTest {
 
   private static final String ORGANISATION_NAME = "findinpath";
-  private static final String SPRING_RETRY_MONITORING_REPOSITORY_NAME = "spring-retry-monitoring";
+  private static final String SPRING_RETRY_METRICS_REPOSITORY_NAME = "spring-retry-metrics";
   private static final String BLOG_REPOSITORY_NAME = "blog";
 
   private MeterRegistry meterRegistry;
@@ -74,8 +74,8 @@ public class GithubApiRetryTest {
         Thread.sleep(delay);
 
         return new GithubRepository[]{
-            new GithubRepository(SPRING_RETRY_MONITORING_REPOSITORY_NAME,
-                new URL("https://github.com/findinpath/spring-retry-monitoring"),
+            new GithubRepository(SPRING_RETRY_METRICS_REPOSITORY_NAME,
+                new URL("https://github.com/findinpath/spring-retry-metrics"),
                 false),
             new GithubRepository(BLOG_REPOSITORY_NAME,
                 new URL("https://github.com/findinpath/blog"),
@@ -133,7 +133,7 @@ public class GithubApiRetryTest {
     var repository = githubApi.getOrganisationRepository(ORGANISATION_NAME, BLOG_REPOSITORY_NAME);
     assertThat(repository, equalTo(blogRepository));
 
-    // check that the monitoring works as expected
+    // check that the metrics are collected as expected
     var meters = meterRegistry.getMeters();
     var githubApiTimer = getExactlyOneMeter(meters, API_METRIC_NAME,
         Timer.class,
@@ -187,7 +187,7 @@ public class GithubApiRetryTest {
       //ignore.
     }
 
-    // check that the monitoring works as expected
+    // check that the metrics are collected as expected
     var meters = meterRegistry.getMeters();
     var successfulCallsTimers = getMeters(meters, API_METRIC_NAME,
         Timer.class,
